@@ -1,0 +1,4 @@
+main:
+  - "精致的小鱼-give <player> 53 1"
+  - "牛皮的猪-give <player> 1 61"
+  - "嘻嘻-spawn <player>"
