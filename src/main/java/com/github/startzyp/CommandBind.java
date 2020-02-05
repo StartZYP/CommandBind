@@ -20,6 +20,7 @@ import java.util.Set;
 
 public class CommandBind extends JavaPlugin implements Listener {
     private HashMap<String,String> CmdMap = new HashMap<>();
+    private String flagString;
     @Override
     public void onEnable() {
         if (!getDataFolder().exists()) {
@@ -35,13 +36,15 @@ public class CommandBind extends JavaPlugin implements Listener {
     }
 
     public void loadConfig(){
-        saveConfig();
+        //saveConfig();
+        reloadConfig();
         List<String> main = getConfig().getStringList("main");
         for (String s:main){
             String[] split = s.split("-");
             System.out.println(split[0]+"-"+split[1]);
             CmdMap.put(split[0],split[1]);
         }
+        flagString = getConfig().getString("Flag");
     }
 
     @EventHandler
@@ -58,14 +61,16 @@ public class CommandBind extends JavaPlugin implements Listener {
                         String docmd = CmdMap.get(s);
                         String newcmd = docmd.replace("<player>", player.getName());
                         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),newcmd);
-                        int amount = itemInHand.getAmount();
-                        if (amount==1){
-                            player.setItemInHand(new ItemStack(Material.AIR));
-                        }else {
-                            itemInHand.setAmount(amount-1);
-                            player.setItemInHand(itemInHand);
+                        if (!lore.contains(flagString)){
+                            int amount = itemInHand.getAmount();
+                            if (amount==1){
+                                player.setItemInHand(new ItemStack(Material.AIR));
+                            }else {
+                                itemInHand.setAmount(amount-1);
+                                player.setItemInHand(itemInHand);
+                            }
+                            player.updateInventory();
                         }
-                        player.updateInventory();
                     }
                 }
             }
@@ -76,7 +81,7 @@ public class CommandBind extends JavaPlugin implements Listener {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender.isOp()&&args.length==1&&args[0].equalsIgnoreCase("reload")){
-            reloadConfig();
+            loadConfig();
             sender.sendMessage("插件重载成功");
         }
         return super.onCommand(sender, command, label, args);
