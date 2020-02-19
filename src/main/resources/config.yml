@@ -1,5 +1,5 @@
 main:
-  - "精致的小鱼无限-give <player> 53 1"
-  - "牛皮的猪-give <player> 1 61"
-  - "嘻嘻无限-spawn <player>"
+  - "精致的小鱼无限-1-give <player> 53 1"
+  - "牛皮的猪-16-give <player> 1 61"
+  - "嘻嘻无限-8-spawn <player>"
 Flag: "无限"
